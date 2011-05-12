@@ -31,13 +31,14 @@ function print_manual()
 [[
 
 This dice roller can roll amost any number of dice of any type (1000 d37 is possible)
-The syntax of use is: '<number_of_rolls> <type_of_dice> <action_tokens>'
-(Of course, there must be at least one space between the number of rolls and the type of dice.)
+The syntax of use is: '<number_of_rolls>d<type_of_dice> <action_tokens>'
+(There must be one, and only one 'd' between the number of rolls and the type of dice.)
 The action tokens are symbols that represent some kind of post processing of the data and may come at any order.
 Currentily, the supported tokens are:
   '+'  will print the sum of all rolls;
   '<{number}' will print the top 'number' least roll values;
   '>{number}' will print the top 'number' greatest roll values.
+Also, if the number of rolls is negative, the rolls will not be displayed, but dice will be rolled and tokens remain active.
 
 A null(0) number of rolls or type of dice exits the program.
 ]]	)
@@ -60,10 +61,9 @@ function print_rolls(rolls)
 	end
 end
 
-function read_command()
-	--Pattern: get positive number(nrolls), 1+ spaces(separator), get number(type of dice), 0+ spaces, get 0+ tokens(actions) 
-	command = io.read()
-	local _, tokens, nrolls, dice = string.find(command, "(%d+)" .. "%s+" .. "(%d+)" .."%s*")
+function parse_command(command)
+	--Pattern: get positive or negative number(nrolls), d(separator), get number(type of dice), 0+ spaces, get 0+ tokens(actions) 
+	local _, tokens, nrolls, dice = string.find(command, "(%-?%d+)" .. "d" .. "(%d+)" .."%s*")
 	if tokens then
 		tokens = string.sub(command, tokens+1)
 		tokens = string.match(tokens, "[%d%p]*")
@@ -73,7 +73,7 @@ function read_command()
 	return nrolls, dice, tokens
 end
 
-function gen_tokens_actions()
+local function gen_tokens_actions()
 	local tokens_actions = {}
 	tokens_actions.sum_ex = "+"
 	tokens_actions.least_ex = "%<".."%s*".."(%d+)"
@@ -120,6 +120,7 @@ function gen_tokens_actions()
 
 	return tokens_actions
 end
+tokens_actions = gen_tokens_actions()
 
 function has_token(tokens, token)
 	return string.match(tokens, token)
@@ -133,29 +134,4 @@ function do_tokens(rolls, tokens)
 	end
 end
 
-function droll_main_loop()
-	while true do
-
-		print("\nEnter number of rolls, type of die and action tokens:")
-
-		local nrolls, dice, tokens = read_command()
-
-		if nrolls and dice then
-			--check whether program should stop executing	
-			if nrolls == 0 or dice == 0 then
-				break 
-			else
-			--if not, roll, store and print all rolls
-				rolls = roll(nrolls, dice)
-				print_rolls(rolls)
-
-				do_tokens(rolls, tokens)
-			end
-		else
-			print(CMD_ERROR)
-		end
-
-	end
-end
 --------------------begin configs------------------------
-tokens_actions = gen_tokens_actions()
