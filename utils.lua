@@ -2,7 +2,7 @@
 
 This file has a few general handy functions for table manipulation.
 
-Copyright (C) 2011 Elias Tandel Barrionovo
+Copyright (C) 2011 Elias Tandel Barrionovo <elias.tandel@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
