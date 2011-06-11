@@ -35,9 +35,9 @@ The syntax of use is: '<number_of_rolls>d<type_of_dice> <action_tokens>'
 (There must be one, and only one 'd' between the number of rolls and the type of dice.)
 The action tokens are symbols that represent some kind of post processing of the data and may come at any order.
 Currentily, the supported tokens are:
-  '+'  will print the sum of all rolls;
-  '<{number}' will print the top 'number' least roll values;
-  '>{number}' will print the top 'number' greatest roll values.
+  '++'  will print the sum of all rolls;
+  '{number}<' will print the top 'number' least roll values;
+  '{number}>' will print the top 'number' greatest roll values.
 Also, if the number of rolls is negative, the rolls will not be displayed, but dice will be rolled and tokens remain active.
 
 A null(0) number of rolls or type of dice exits the program.
@@ -66,7 +66,7 @@ function parse_command(command)
 	local _, tokens, nrolls, dice = string.find(command, "(%-?%d+)" .. "d" .. "(%d+)" .."%s*")
 	if tokens then
 		tokens = string.sub(command, tokens+1)
-		tokens = string.match(tokens, "[%d%p]*")
+		tokens = string.match(tokens, "[%d%p%s]*")
 	end
 
 	nrolls, dice = tonumber(nrolls), tonumber(dice)
@@ -76,8 +76,8 @@ end
 local function gen_tokens_actions()
 	local tokens_actions = {}
 	tokens_actions.sum_ex = "%+%+"
-	tokens_actions.least_ex = "%<".."%s*".."(%d+)"
-	tokens_actions.greatest_ex = "%>".."%s*".."(%d+)"
+	tokens_actions.least_ex = "(%d+)".."%s*".."%<"
+	tokens_actions.greatest_ex = "(%d+)".."%s*".."%>"
 
 	tokens_actions[tokens_actions.sum_ex] = function(rolls, tokens)
 		-- sums all rolls
