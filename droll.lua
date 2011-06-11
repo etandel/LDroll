@@ -75,7 +75,7 @@ end
 
 local function gen_tokens_actions()
 	local tokens_actions = {}
-	tokens_actions.sum_ex = "+"
+	tokens_actions.sum_ex = "%+%+"
 	tokens_actions.least_ex = "%<".."%s*".."(%d+)"
 	tokens_actions.greatest_ex = "%>".."%s*".."(%d+)"
 
