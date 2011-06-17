@@ -32,7 +32,7 @@ function print_manual()
 
 This dice roller can roll amost any number of dice of any type (1000 d37 is possible)
 The syntax of use is: '<number_of_rolls>d<type_of_dice> <action_tokens>'
-(There must be one, and only one 'd' between the number of rolls and the type of dice.)
+(Notice the space separating the roll from the token. Also, at least one space is required to separate each token.)
 The action tokens are symbols that represent some kind of post processing of the data and may come at any order.
 Currentily, the supported tokens are:
   '++'  will print the sum of all rolls;
@@ -62,10 +62,10 @@ function print_rolls(rolls)
 end
 
 function parse_command(command)
-	--Pattern: get positive or negative number(nrolls), d(separator), get number(type of dice), 0+ spaces, get 0+ tokens(actions) 
+	--Pattern: get positive or negative number(nrolls), d(separator), get number(type of dice), get 0+ tokens(actions), 0+ spaces 
 	local _, tokens, nrolls, dice = string.find(command, "(%-?%d+)" .. "d" .. "(%d+)" .."%s*")
 	if tokens then
-		tokens = string.sub(command, tokens+1)
+		tokens = string.sub(command, tokens)
 		tokens = string.match(tokens, "[%d%p%s]*")
 	end
 
@@ -123,12 +123,25 @@ function has_token(tokens, token)
 	return string.match(tokens, token)
 end
 
+function find_action(token)
+	for pattern, action in pairs(tokens_actions) do
+		if string.find(token, pattern) then
+			return action
+		end
+	end
+	return nil
+end
+
 function do_tokens(rolls, tokens)
-	for token, action in pairs(tokens_actions) do
-		if has_token(tokens, token) then
+	local SPACE_1 = "%s+"
+	local SPACE_0 = "%s-"
+	for token in string.gmatch(tokens, SPACE_1 .. "([%d%p][%d%p])" .. SPACE_0) do
+		print("\nTOKEN:" .. token .. ";\n")
+		local action = find_action(token)
+		print (action)
+		if action then
 			action(rolls, tokens)
 		end
 	end
-end
 
---------------------begin configs------------------------
+end
