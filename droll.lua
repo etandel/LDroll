@@ -136,9 +136,7 @@ function do_tokens(rolls, tokens)
 	local SPACE_1 = "%s+"
 	local SPACE_0 = "%s-"
 	for token in string.gmatch(tokens, SPACE_1 .. "([%d%p][%d%p])" .. SPACE_0) do
-		print("\nTOKEN:" .. token .. ";\n")
 		local action = find_action(token)
-		print (action)
 		if action then
 			action(rolls, tokens)
 		end
