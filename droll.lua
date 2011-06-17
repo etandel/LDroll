@@ -73,21 +73,21 @@ function parse_command(command)
 	return nrolls, dice, tokens
 end
 
-local function gen_tokens_actions()
-	local tokens_actions = {}
-	tokens_actions.sum_ex = "%+%+"
-	tokens_actions.least_ex = "(%d+)".."%s*".."%<"
-	tokens_actions.greatest_ex = "(%d+)".."%s*".."%>"
+do
+	tokens_actions = {}
+	local sum_ex = "%+%+"
+	local least_ex = "(%d+)".."%s*".."%<"
+	local greatest_ex = "(%d+)".."%s*".."%>"
 
-	tokens_actions[tokens_actions.sum_ex] = function(rolls, tokens)
+	tokens_actions[sum_ex] = function(rolls, tokens)
 		-- sums all rolls
 		print("\nThe sum of all rolls is: " .. table.sum(rolls))
 	end
 
-	tokens_actions[tokens_actions.least_ex] = function(rolls, tokens)
+	tokens_actions[least_ex] = function(rolls, tokens)
 		--gets top x least rolls (x is user defined)
 
-		local top = string.match(tokens, tokens_actions.least_ex)
+		local top = string.match(tokens, least_ex)
 		print("\nThe " .. top .. " least rolls are:")
 
 		local sorted = table.copy(rolls)
@@ -101,10 +101,10 @@ local function gen_tokens_actions()
 		end
 	end
 
-	tokens_actions[tokens_actions.greatest_ex] = function(rolls, tokens)
+	tokens_actions[greatest_ex] = function(rolls, tokens)
 		--gets top x greatest rolls (x is user defined)
 
-		local top = string.match(tokens, tokens_actions.greatest_ex)
+		local top = string.match(tokens, greatest_ex)
 		print("\nThe " .. top .. " greatest rolls are:")
 
 		local sorted = table.copy(rolls)
@@ -117,10 +117,7 @@ local function gen_tokens_actions()
 			print("Value " .. i .. ": " .. sorted[i])
 		end
 	end
-
-	return tokens_actions
 end
-tokens_actions = gen_tokens_actions()
 
 function has_token(tokens, token)
 	return string.match(tokens, token)
