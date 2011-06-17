@@ -88,7 +88,7 @@ local function gen_tokens_actions()
 		--gets top x least rolls (x is user defined)
 
 		local top = string.match(tokens, tokens_actions.least_ex)
-		print("\nThe top " .. top .. " least rolls are:")
+		print("\nThe " .. top .. " least rolls are:")
 
 		local sorted = table.copy(rolls)
 		table.sort(sorted)
@@ -105,7 +105,7 @@ local function gen_tokens_actions()
 		--gets top x greatest rolls (x is user defined)
 
 		local top = string.match(tokens, tokens_actions.greatest_ex)
-		print("\nThe top " .. top .. " greatest rolls are:")
+		print("\nThe " .. top .. " greatest rolls are:")
 
 		local sorted = table.copy(rolls)
 		table.sort(sorted, function(a,b) return a>b end)
