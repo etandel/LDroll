@@ -78,16 +78,28 @@ do
 	local sum_ex = "%+%+"
 	local least_ex = "(%d+)".."%s*".."%<"
 	local greatest_ex = "(%d+)".."%s*".."%>"
+	local plus_ex = "%+" .. "(%d+)"
 
-	tokens_actions[sum_ex] = function(rolls, tokens)
+	tokens_actions[plus_ex] = function(rolls, token)
+		print("sum! =P")
+	---[[
+		local factor = string.match(token, plus_ex)
+		for index, roll in ipairs(rolls) do
+			rolls[index] = roll + factor
+		end
+	--]]
+
+	end
+
+	tokens_actions[sum_ex] = function(rolls, token)
 		-- sums all rolls
 		print("\nThe sum of all rolls is: " .. table.sum(rolls))
 	end
 
-	tokens_actions[least_ex] = function(rolls, tokens)
+	tokens_actions[least_ex] = function(rolls, token)
 		--gets top x least rolls (x is user defined)
 
-		local top = string.match(tokens, least_ex)
+		local top = string.match(token, least_ex)
 		print("\nThe " .. top .. " least rolls are:")
 
 		local sorted = table.copy(rolls)
@@ -101,10 +113,10 @@ do
 		end
 	end
 
-	tokens_actions[greatest_ex] = function(rolls, tokens)
+	tokens_actions[greatest_ex] = function(rolls, token)
 		--gets top x greatest rolls (x is user defined)
 
-		local top = string.match(tokens, greatest_ex)
+		local top = string.match(token, greatest_ex)
 		print("\nThe " .. top .. " greatest rolls are:")
 
 		local sorted = table.copy(rolls)
@@ -135,10 +147,10 @@ end
 function do_tokens(rolls, tokens)
 	local SPACE_1 = "%s+"
 	local SPACE_0 = "%s-"
-	for token in string.gmatch(tokens, SPACE_1 .. "([%d%p][%d%p])" .. SPACE_0) do
+	for token in string.gmatch(tokens, "%s+" .."([%d%p][%d%p])".. "%s-") do
 		local action = find_action(token)
 		if action then
-			action(rolls, tokens)
+			action(rolls, token)
 		end
 	end
 
