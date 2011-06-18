@@ -35,9 +35,10 @@ The syntax of use is: '<number_of_rolls>d<type_of_dice> <action_tokens>'
 (Notice the space separating the roll from the token. Also, at least one space is required to separate each token.)
 The action tokens are symbols that represent some kind of post processing of the data and may come at any order.
 Currentily, the supported tokens are:
-  '++'  will print the sum of all rolls;
-  '{number}<' will print the top 'number' least roll values;
-  '{number}>' will print the top 'number' greatest roll values.
+  '++' will print the sum of all rolls;
+  '+n' wil add 'n' to all rolls (warning: overwrites rolls) 
+  'n<' will print the 'n' least roll values;
+  'n>' will print the 'n' greatest roll values.
 Also, if the number of rolls is negative, the rolls will not be displayed, but dice will be rolled and tokens remain active.
 
 A null(0) number of rolls or type of dice exits the program.
