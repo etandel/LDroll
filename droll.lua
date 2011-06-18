@@ -82,14 +82,10 @@ do
 	local plus_ex = "%+" .. "(%d+)"
 
 	tokens_actions[plus_ex] = function(rolls, token)
-		print("sum! =P")
-	---[[
 		local factor = string.match(token, plus_ex)
 		for index, roll in ipairs(rolls) do
 			rolls[index] = roll + factor
 		end
-	--]]
-
 	end
 
 	tokens_actions[sum_ex] = function(rolls, token)
