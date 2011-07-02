@@ -36,6 +36,7 @@ The syntax of use is: '<number_of_rolls>d<type_of_dice> <action_tokens>'
 The action tokens are symbols that represent some kind of post processing of the data and may come at any order.
 Currentily, the supported tokens are:
   '++' will print the sum of all rolls;
+  '..' will print all rolls;
   '+n' wil add 'n' to all rolls (warning: overwrites rolls) 
   '-n' wil subtract 'n' to all rolls (warning: overwrites rolls) 
   'n<' will print the 'n' least roll values;
@@ -61,6 +62,7 @@ function print_rolls(rolls)
 	for i, val in ipairs(rolls) do
 		print("Roll " .. i .. ": " .. val) 
 	end
+	print("\n")
 end
 
 function parse_command(command)
@@ -82,6 +84,11 @@ do
 	local greatest_ex = "(%d+)".."%s*".."%>"
 	local plus_ex = "%+" .. "(%d+)"
 	local minus_ex = "%-" .. "(%d+)"
+	local print_ex = "%.%."
+
+	tokens_actions[print_ex] = function(rolls, token)
+		print_rolls(rolls)
+	end
 
 	tokens_actions[plus_ex] = function(rolls, token)
 		local factor = string.match(token, plus_ex)
