@@ -37,6 +37,7 @@ The action tokens are symbols that represent some kind of post processing of the
 Currentily, the supported tokens are:
   '++' will print the sum of all rolls;
   '+n' wil add 'n' to all rolls (warning: overwrites rolls) 
+  '-n' wil subtract 'n' to all rolls (warning: overwrites rolls) 
   'n<' will print the 'n' least roll values;
   'n>' will print the 'n' greatest roll values.
 Also, if the number of rolls is negative, the rolls will not be displayed, but dice will be rolled and tokens remain active.
