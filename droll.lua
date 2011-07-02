@@ -32,7 +32,7 @@ function print_manual()
 
 This dice roller can roll amost any number of dice of any type (1000 d37 is possible)
 The syntax of use is: '<number_of_rolls>d<type_of_dice> <action_tokens>'
-(Notice the space separating the roll from the token. Also, at least one space is required to separate each token.)
+(Notice the space separating the roll from the tokens. Also, at least one space is required to separate each token.)
 The action tokens are symbols that represent some kind of post processing of the data and may come at any order.
 Currentily, the supported tokens are:
   '++' will print the sum of all rolls;
@@ -80,11 +80,19 @@ do
 	local least_ex = "(%d+)".."%s*".."%<"
 	local greatest_ex = "(%d+)".."%s*".."%>"
 	local plus_ex = "%+" .. "(%d+)"
+	local minus_ex = "%-" .. "(%d+)"
 
 	tokens_actions[plus_ex] = function(rolls, token)
 		local factor = string.match(token, plus_ex)
 		for index, roll in ipairs(rolls) do
 			rolls[index] = roll + factor
+		end
+	end
+
+	tokens_actions[minus_ex] = function(rolls, token)
+		local factor = string.match(token, minus_ex)
+		for index, roll in ipairs(rolls) do
+			rolls[index] = roll - factor
 		end
 	end
 
