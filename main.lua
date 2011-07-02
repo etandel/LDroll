@@ -1,3 +1,4 @@
+#!/usr/bin/lua
 --[[
 This file has the main program and is the one that should be executed by the Lua interpreter.
 
