@@ -27,7 +27,7 @@ math.randomseed(os.time())
 function droll_main_loop()
         while true do
 
-                print("\nEnter number of rolls, type of die and action tokens:")
+                print("Enter number of rolls, type of die and action tokens:\n")
 
                 local nrolls, dice, tokens = parse_command(io.read())
 

@@ -44,6 +44,7 @@ Currentily, the supported tokens are:
 Also, if the number of rolls is negative, the rolls will not be displayed, but dice will be rolled and tokens remain active.
 
 A null(0) number of rolls or type of dice exits the program.
+
 ]]	)
 end
 
@@ -106,14 +107,15 @@ do
 
 	tokens_actions[sum_ex] = function(rolls, token)
 		-- sums all rolls
-		print("\nThe sum of all rolls is: " .. table.sum(rolls))
+		print("The sum of all rolls is: " .. table.sum(rolls))
+		print("\n")
 	end
 
 	tokens_actions[least_ex] = function(rolls, token)
 		--gets top x least rolls (x is user defined)
 
 		local top = string.match(token, least_ex)
-		print("\nThe " .. top .. " least rolls are:")
+		print("The " .. top .. " least rolls are:")
 
 		local sorted = table.copy(rolls)
 		table.sort(sorted)
@@ -124,13 +126,15 @@ do
 			end
 			print("Value " .. i .. ": " .. sorted[i])
 		end
+
+		print("\n")
 	end
 
 	tokens_actions[greatest_ex] = function(rolls, token)
 		--gets top x greatest rolls (x is user defined)
 
 		local top = string.match(token, greatest_ex)
-		print("\nThe " .. top .. " greatest rolls are:")
+		print("The " .. top .. " greatest rolls are:")
 
 		local sorted = table.copy(rolls)
 		table.sort(sorted, function(a,b) return a>b end)
@@ -141,6 +145,7 @@ do
 			end
 			print("Value " .. i .. ": " .. sorted[i])
 		end
+		print("\n")
 	end
 end
 
@@ -160,7 +165,7 @@ end
 function do_tokens(rolls, tokens)
 	local SPACE_1 = "%s+"
 	local SPACE_0 = "%s-"
-	for token in string.gmatch(tokens, "%s+" .."([%d%p][%d%p])".. "%s-") do
+	for token in string.gmatch(tokens, "%s+" .."([%d%p]+)".. "%s-") do
 		local action = find_action(token)
 		if action then
 			action(rolls, token)
