@@ -1,5 +1,7 @@
 #!/usr/bin/env lua
 
+package.path = './src/?.lua;' .. package.path
+
 local d = require "droll"
 
 
