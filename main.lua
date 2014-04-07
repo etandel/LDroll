@@ -2,33 +2,45 @@
 
 package.path = './src/?.lua;' .. package.path
 
-local d = require "droll"
+local eval = require'eval'.eval
+local parse = require'parser'.parse
+
+
+local CMD_ERROR = "Wrong command. Please, stick to the instructions.\n\n\n"
+
+
+local function print_result(result)
+    if type(result) == 'table' then
+        for i, val in ipairs(result) do
+            io.write("Roll " .. tostring(i) .. ": " .. tostring(val) .. "\n")
+        end
+        io.write("\n\n")
+    else
+        io.write("Result: " .. tostring(result) .. "\n\n")
+    end
+end
 
 
 local function droll_main_loop()
     while true do
         print("Enter number of rolls, type of die and action tokens:\n")
 
-        local nrolls, dice, tokens = d.parse_command(io.read())
-        if nrolls and dice then
-            --check whether program should stop executing
-            if nrolls == 0 or dice == 0 then
-                break
-            else
-                --if not, roll, store and print all rolls
-                rolls = d.roll(math.abs(nrolls), dice)
-                if nrolls > 0 then
-                        d.print_rolls(rolls)
-                end
-                d.do_tokens(rolls, tokens)
-            end
+        local prog = io.read()
+        if prog:match'exit' then
+            break
         else
-            print(d.CMD_ERROR)
+            local ast = parse(prog)
+            if not ast then
+                io.write(CMD_ERROR)
+            else
+                local result = eval(ast)
+                print_result(result)
+            end
         end
     end
 end
 
 
 math.randomseed(os.time())
-d.print_manual()
+--d.print_manual()
 droll_main_loop()

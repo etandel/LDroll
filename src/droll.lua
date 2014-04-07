@@ -2,7 +2,6 @@ require "utils"
 
 
 ------------begin functions and constants definitions------------
-local CMD_ERROR = "Wrong command. Please, stick to the instructions."
 
 local function print_manual()
 	print(
@@ -158,6 +157,5 @@ return {
     parse_command = parse_command,
     print_manual = print_manual,
     print_rolls = print_rolls,
-    CMD_ERROR = CMD_ERROR,
     roll = roll,
 }
