@@ -1,32 +1,10 @@
---[[
-
-This file has all LuaDroll specific functions and constants declarations.
-
-Copyright (C) 2011 Elias Tandel Barrionovo <elias.tandel@gmail.com>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-]]--
-
 require "utils"
 
 
 ------------begin functions and constants definitions------------
-CMD_ERROR = "Wrong command. Please, stick to the instructions."
+local CMD_ERROR = "Wrong command. Please, stick to the instructions."
 
-function print_manual()
+local function print_manual()
 	print(
 [[
 
@@ -37,8 +15,8 @@ The action tokens are symbols that represent some kind of post processing of the
 Currentily, the supported tokens are:
   '++' will print the sum of all rolls;
   '..' will print all rolls;
-  '+n' wil add 'n' to all rolls (warning: overwrites rolls) 
-  '-n' wil subtract 'n' to all rolls (warning: overwrites rolls) 
+  '+n' wil add 'n' to all rolls (warning: overwrites rolls)
+  '-n' wil subtract 'n' to all rolls (warning: overwrites rolls)
   'n<' will print the 'n' least roll values;
   'n>' will print the 'n' greatest roll values.
 Also, if the number of rolls is negative, the rolls will not be displayed, but dice will be rolled and tokens remain active.
@@ -48,26 +26,26 @@ A null(0) number of rolls or type of dice exits the program.
 ]]	)
 end
 
-function roll(nrolls, dice) 
+local function roll(nrolls, dice)
 	local rolls = {}
 
 	for i=1,nrolls do
 		rolls[#rolls+1] = math.random(dice)
-	end 
+	end
 
 	return rolls
 end
 
 
-function print_rolls(rolls) 
+local function print_rolls(rolls)
 	for i, val in ipairs(rolls) do
-		print("Roll " .. i .. ": " .. val) 
+		print("Roll " .. i .. ": " .. val)
 	end
 	print("\n")
 end
 
-function parse_command(command)
-	--Pattern: get positive or negative number(nrolls), d(separator), get number(type of dice), get 0+ tokens(actions), 0+ spaces 
+local function parse_command(command)
+	--Pattern: get positive or negative number(nrolls), d(separator), get number(type of dice), get 0+ tokens(actions), 0+ spaces
 	local _, tokens, nrolls, dice = string.find(command, "(%-?%d+)" .. "d" .. "(%d+)" .."%s*")
 	if tokens then
 		tokens = string.sub(command, tokens)
@@ -149,11 +127,11 @@ do
 	end
 end
 
-function has_token(tokens, token)
+local function has_token(tokens, token)
 	return string.match(tokens, token)
 end
 
-function find_action(token)
+local function find_action(token)
 	for pattern, action in pairs(tokens_actions) do
 		if string.find(token, pattern) then
 			return action
@@ -162,7 +140,7 @@ function find_action(token)
 	return nil
 end
 
-function do_tokens(rolls, tokens)
+local function do_tokens(rolls, tokens)
 	local SPACE_1 = "%s+"
 	local SPACE_0 = "%s-"
 	for token in string.gmatch(tokens, "%s+" .."([%d%p]+)".. "%s-") do
@@ -173,3 +151,13 @@ function do_tokens(rolls, tokens)
 	end
 
 end
+
+
+return {
+    do_tokens = do_tokens,
+    parse_command = parse_command,
+    print_manual = print_manual,
+    print_rolls = print_rolls,
+    CMD_ERROR = CMD_ERROR,
+    roll = roll,
+}
