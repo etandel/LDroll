@@ -2,30 +2,31 @@ local lpeg = require 'lpeg'
 
 local P, R, S, V = lpeg.P, lpeg.R, lpeg.S, lpeg.V
 
+local C, Cg, Cs, Ct = lpeg.C, lpeg.Cg, lpeg.Cs, lpeg.Ct
 
+
+local space = P' '^0
 local number = R'09'^1
-local roll = number * 'd' * number
-local atom = roll + number
+local roll = Ct(Cg(number, 'ndice') * 'd' * Cg(number, 'dsize'))
+local atom = Ct(Cg(roll, 'roll') + Cg(number, 'const')) * space
+local op = Cg(S'-+', 'op') * space
+local open = '(' * space
+local close = ')' * space
 
-local sep = P' '^0
-
-local op = S'-+'
-
-local function separated(...)
-    local p = sep
-    for i = 1, select('#', ...) do
-        p = p * select(i, ...) * sep
-    end
-    return p
-end
-
-local term = P{
-    'S',
-    S = separated(V'A', op, V'A') + V'A',
-    A = separated('(', V'S',')') + atom,
+local Term, Exp = V'Term', V'Exp'
+local grammar = P{Exp,
+    Exp = Ct(Term * (op * Term)^0),
+    Term = atom + open * Exp * close,
 }
+
+grammar = space * grammar * space
+
+
+local parse = function (str)
+    return grammar:match(str)
+end
 
 
 return {
-    term = term,
+    parse = parse,
 }
