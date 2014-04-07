@@ -3,26 +3,43 @@ require 'utils'
 local parse = require'parser'.parse
 
 
-local ops = {
-    ['+'] = function (a, b)
+local whole_op = function (op)
+    return function(a, b)
         if type(a) == 'table' then
             a = table.sum(a)
         end
         if type(b) == 'table' then
             b = table.sum(b)
         end
-        return a + b
-    end,
+        return op(a, b)
+    end
+end
 
-    ['-'] = function (a, b)
+
+local rollwise_op = function (op)
+    return function(a, b)
+        local rolls, const
         if type(a) == 'table' then
-            a = table.sum(a)
+            rolls, const = a, b
+        elseif type(b) == 'table' then
+            rolls, const = b, a
         end
-        if type(b) == 'table' then
-            b = table.sum(b)
+
+        local newrolls = {}
+        for i, v in ipairs(rolls) do
+            newrolls[i] = op(v, const)
         end
-        return a - b
-    end,
+        return newrolls
+    end
+end
+
+
+local ops = {
+    ['+'] = whole_op(function(a,b) return a + b end),
+    ['-'] = whole_op(function(a,b) return a - b end),
+
+    ['.+'] = rollwise_op(function(a,b) return a + b end),
+    ['.-'] = rollwise_op(function(a,b) return a - b end),
 }
 
 

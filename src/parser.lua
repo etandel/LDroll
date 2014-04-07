@@ -9,7 +9,7 @@ local space = P' '^0
 local number = R'09'^1
 local roll = Ct(Cg(number, 'ndice') * 'd' * Cg(number, 'dsize'))
 local atom = Ct(Cg(roll, 'roll') + Cg(number, 'const')) * space
-local op = Cg(S'-+', 'op') * space
+local op = Cg(P'.+' + P'.-' + S'-+', 'op') * space
 local open = '(' * space
 local close = ')' * space
 

@@ -37,7 +37,7 @@ end)
 
 
 describe('Ops tests', function()
-    describe('add tests', function()
+    describe('whole add tests', function()
         local add = ops['+']
 
         it('should add two constants', function()
@@ -57,7 +57,7 @@ describe('Ops tests', function()
         end)
     end)
 
-    describe('sub tests', function()
+    describe('whole sub tests', function()
         local sub = ops['-']
 
         it('should sub two constants', function()
@@ -74,6 +74,34 @@ describe('Ops tests', function()
 
         it('should sub two seqs', function()
             assert.equals(3, sub({2, 3}, {1, 1}))
+        end)
+    end)
+
+    describe('rollwise add tests', function()
+        local add = ops['.+']
+
+        it('should add const and seq', function()
+            local rolls = {2, 5}
+            assert.are.same({3, 6}, add(1, rolls))
+        end)
+
+        it('should add seq and const', function()
+            local rolls = {2, 5}
+            assert.are.same({3, 6}, add(rolls, 1))
+        end)
+    end)
+
+    describe('rollwise sub tests', function()
+        local sub = ops['.-']
+
+        it('should sub const and seq', function()
+            local rolls = {2, 5}
+            assert.are.same({1, 4}, sub(1, rolls))
+        end)
+
+        it('should sub seq and const', function()
+            local rolls = {2, 5}
+            assert.are.same({1, 4}, sub(rolls, 1))
         end)
     end)
 end)

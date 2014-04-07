@@ -173,3 +173,46 @@ describe('Pattern tests', function()
         assert.are.same(tree, parse(s))
     end)
 end)
+
+
+describe('Ops parsing tests', function()
+    it('should parse whole add', function()
+        local s = '1 + 2'
+        local tree = {
+            [1] = {const = '1'},
+            [2] = {const = '2'},
+            op = '+',
+        }
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse whole sub', function()
+        local s = '1 - 2'
+        local tree = {
+            [1] = {const = '1'},
+            [2] = {const = '2'},
+            op = '-',
+        }
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse rollwise add', function()
+        local s = '1 .+ 2'
+        local tree = {
+            [1] = {const = '1'},
+            [2] = {const = '2'},
+            op = '.+',
+        }
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse rollwise sub', function()
+        local s = '1 .- 2'
+        local tree = {
+            [1] = {const = '1'},
+            [2] = {const = '2'},
+            op = '.-',
+        }
+        assert.are.same(tree, parse(s))
+    end)
+end)
