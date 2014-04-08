@@ -48,7 +48,6 @@ local roll = function (roll_args)
     for i = 1, roll_args.ndice do
         rolls[i] = math.random(1, roll_args.dsize)
     end
-    table.sort(rolls)
     return rolls
 end
 
