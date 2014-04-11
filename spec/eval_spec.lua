@@ -1,6 +1,6 @@
 local parse = require 'parser'.parse
 local eval = require 'eval'
-local eval, ops, roll = eval.eval, eval.ops, eval.roll
+local eval, funcs, ops, roll = eval.eval, eval.funcs, eval.ops, eval.roll
 
 
 describe('Eval tests', function()
@@ -32,6 +32,15 @@ describe('Eval tests', function()
     it('should eval parenth\'d deeply nested const ops', function()
         local s = '((140 - (40 + (15 - 5))) + 10)'
         assert.equals(100, eval(parse(s)))
+    end)
+
+    it('should eval funcs', function()
+        local s = spy.on(funcs, 'sum')
+            eval(parse('sum(3d6)'))
+            call = s.calls[1]
+            assert.equals(1, call.n)
+            assert.is.table(call[1])
+        s:revert()
     end)
 end)
 
@@ -112,5 +121,20 @@ describe('roll tests', function()
         local roll_args = {ndice = 5, dsize = 6}
         local rolls = roll(roll_args)
         assert.equals(roll_args.ndice, #rolls)
+    end)
+end)
+
+
+describe('func tests', function()
+    describe('sum', function()
+        local f = funcs.sum
+
+        it('should sum rolls', function()
+            assert.equals(7, f{1, 2, 4})
+        end)
+
+        it('should return passing const ', function()
+            assert.equals(1, f(1))
+        end)
     end)
 end)

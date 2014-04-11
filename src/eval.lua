@@ -52,6 +52,22 @@ local roll = function (roll_args)
 end
 
 
+local funcs = {
+    sum = function(v)
+        local s
+        if type(v) == 'table' then
+            s = 0
+            for _, i in ipairs(v) do
+                s = s + i
+            end
+        else
+            s = v
+        end
+        return s
+    end,
+}
+
+
 local function eval (node)
     if node.const then
         return tonumber(node.const)
@@ -59,6 +75,15 @@ local function eval (node)
         return roll(node.roll)
     elseif node.op then
         return ops[node.op](eval(node[1]), eval(node[2]))
+    elseif node.func then
+        local func = node.func
+
+        local args = {}
+        for i, arg in ipairs(func) do
+            args[i] = eval(arg)
+        end
+
+        return funcs[func.ident](table.unpack(args))
     else
         return eval(node[1])
     end
@@ -69,4 +94,5 @@ return {
     eval = eval,
     ops = ops,
     roll = roll,
+    funcs = funcs,
 }
