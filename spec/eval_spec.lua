@@ -137,4 +137,28 @@ describe('func tests', function()
             assert.equals(1, f(1))
         end)
     end)
+
+    describe('max', function()
+        local f = funcs.max
+
+        it('should find max', function()
+            assert.equals(8, f{1, 8, 4, 8})
+        end)
+
+        it('should return passing const ', function()
+            assert.equals(1, f(1))
+        end)
+    end)
+
+    describe('min', function()
+        local f = funcs.min
+
+        it('should find min', function()
+            assert.equals(4, f{123, 4, 4, 8})
+        end)
+
+        it('should return passing const ', function()
+            assert.equals(1, f(1))
+        end)
+    end)
 end)

@@ -65,6 +65,22 @@ local funcs = {
         end
         return s
     end,
+
+    max = function(v)
+        if type(v) == 'table' then
+            return math.max(table.unpack(v))
+        else
+            return v
+        end
+    end,
+
+    min = function(v)
+        if type(v) == 'table' then
+            return math.min(table.unpack(v))
+        else
+            return v
+        end
+    end,
 }
 
 
