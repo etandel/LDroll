@@ -216,3 +216,99 @@ describe('Ops parsing tests', function()
         assert.are.same(tree, parse(s))
     end)
 end)
+
+
+describe('Function parsing tests', function()
+    it('should parse empty call', function()
+        local s = 'foo()'
+        local tree = {{
+            func = {
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse one const arg', function()
+        local s = 'foo(1)'
+        local tree = {{
+            func = {
+                {const = '1'},
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse const-only args', function()
+        local s = 'foo(1 2 3)'
+        local tree = {{
+            func = {
+                {const = '1'},
+                {const = '2'},
+                {const = '3'},
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse roll-only args', function()
+        local s = 'foo(1d4 20d2 10d10)'
+        local tree = {{
+            func = {
+                {roll = {ndice = '1', dsize = '4'}},
+                {roll = {ndice = '20', dsize = '2'}},
+                {roll = {ndice = '10', dsize = '10'}},
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse mixed args', function()
+        local s = 'foo(1d4 20 10d10)'
+        local tree = {{
+            func = {
+                {roll = {ndice = '1', dsize = '4'}},
+                {const = '20'},
+                {roll = {ndice = '10', dsize = '10'}},
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse nested calls', function()
+        local s = 'foo(1d4 bar(20) 10d10)'
+        local tree = {{
+            func = {
+                {roll = {ndice = '1', dsize = '4'}},
+                {func = {
+                    {const = '20'},
+                    ident = 'bar',
+                }},
+                {roll = {ndice = '10', dsize = '10'}},
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+
+    it('should parse deeply nested calls', function()
+        local s = 'foo(bar(baz(20)))'
+        local tree = {{
+            func = {
+                {func = {
+                    {func = {
+                        {const = '20'},
+                        ident = 'baz',
+                    }},
+                    ident = 'bar',
+                }},
+                ident = 'foo',
+            }
+        }}
+        assert.are.same(tree, parse(s))
+    end)
+end)
