@@ -1,7 +1,7 @@
 local parse = require 'parser'.parse
-local eval = require 'eval'
-local funcs, ops, roll = eval.funcs, eval.ops, eval.roll
-local eval, run = eval.eval, eval.run
+local ldroll = require 'ldroll'
+local funcs, ops, roll = ldroll.funcs, ldroll.ops, ldroll.roll
+local eval, run = ldroll.eval, ldroll.run
 
 
 describe('Eval tests', function()

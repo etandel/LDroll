@@ -2,7 +2,7 @@
 
 package.path = './src/?.lua;' .. package.path
 
-local eval = require'eval'
+local ldroll = require'ldroll'
 
 
 local function droll_main_loop()
@@ -13,9 +13,9 @@ local function droll_main_loop()
         if prog:match'exit' then
             break
         else
-            local result, msg = eval.run(prog)
+            local result, msg = ldroll.run(prog)
             if result then
-                eval.funcs.p(result)
+                ldroll.funcs.p(result)
             else
                 io.write(msg, '\n\n\n')
             end
