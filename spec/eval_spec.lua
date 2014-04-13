@@ -177,4 +177,17 @@ describe('func tests', function()
             assert.are.same({5, 8, 15}, f({4, 8, 3, 15, 5}, 3))
         end)
     end)
+
+    describe('p()', function()
+        local f = funcs.p
+
+        it('should return passing arg', function()
+            s = stub(io, 'write')
+                local t = {}
+                f(t)
+                assert.equals(t, f(t))
+                assert.equals(1, f(1))
+            s:revert()
+        end)
+    end)
 end)

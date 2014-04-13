@@ -54,6 +54,18 @@ end
 
 local funcs = {}
 
+function funcs.p(v)
+    if type(v) == 'table' then
+        for i, val in ipairs(v) do
+            io.write("Roll " .. tostring(i) .. ": " .. tostring(val) .. "\n")
+        end
+        io.write("\n\n")
+    else
+        io.write("Result: " .. tostring(v) .. "\n\n")
+    end
+    return v
+end
+
 function funcs.sum(v)
     local s
     if type(v) == 'table' then
