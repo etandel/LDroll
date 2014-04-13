@@ -2,23 +2,7 @@
 
 package.path = './src/?.lua;' .. package.path
 
-local eval = require'eval'.eval
-local parse = require'parser'.parse
-
-
-local CMD_ERROR = "Wrong command. Please, stick to the instructions.\n\n\n"
-
-
-local function print_result(result)
-    if type(result) == 'table' then
-        for i, val in ipairs(result) do
-            io.write("Roll " .. tostring(i) .. ": " .. tostring(val) .. "\n")
-        end
-        io.write("\n\n")
-    else
-        io.write("Result: " .. tostring(result) .. "\n\n")
-    end
-end
+local eval = require'eval'
 
 
 local function droll_main_loop()
@@ -29,12 +13,11 @@ local function droll_main_loop()
         if prog:match'exit' then
             break
         else
-            local ast = parse(prog)
-            if not ast then
-                io.write(CMD_ERROR)
+            local result, msg = eval.run(prog)
+            if result then
+                eval.funcs.p(result)
             else
-                local result = eval(ast)
-                print_result(result)
+                io.write(msg, '\n\n\n')
             end
         end
     end
