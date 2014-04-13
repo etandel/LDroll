@@ -161,9 +161,20 @@ local function eval (node)
 end
 
 
+local function run(code)
+    local ast = parse(code)
+    if ast then
+        return eval(ast)
+    else
+        return nil, 'Syntax error'
+    end
+end
+
+
 return {
     eval = eval,
     ops = ops,
     roll = roll,
     funcs = funcs,
+    run = run,
 }

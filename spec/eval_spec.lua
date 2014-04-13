@@ -1,6 +1,7 @@
 local parse = require 'parser'.parse
 local eval = require 'eval'
-local eval, funcs, ops, roll = eval.eval, eval.funcs, eval.ops, eval.roll
+local funcs, ops, roll = eval.funcs, eval.ops, eval.roll
+local eval, run = eval.eval, eval.run
 
 
 describe('Eval tests', function()
@@ -48,6 +49,19 @@ describe('Eval tests', function()
             eval(parse('bla(243)'))
             assert.stub(s).called_with('function "bla" not found.')
         s:revert()
+    end)
+end)
+
+
+describe('run() tests', function()
+    it('should return nil on syntax error', function()
+        r, msg = run('----')
+        assert.are.same(r, nil)
+        assert.equals(msg, 'Syntax error')
+    end)
+
+    it('should return whatever eval() returns', function()
+        assert.equal(1, run(1))
     end)
 end)
 
