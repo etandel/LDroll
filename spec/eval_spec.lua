@@ -161,4 +161,20 @@ describe('func tests', function()
             assert.equals(1, f(1))
         end)
     end)
+
+    describe('minn', function()
+        local f = funcs.minn
+
+        it('should find least 3', function()
+            assert.are.same({1, 3, 4}, f({4, 8, 3, 1, 5}, 3))
+        end)
+    end)
+
+    describe('maxn', function()
+        local f = funcs.maxn
+
+        it('should find largest 3', function()
+            assert.are.same({5, 8, 15}, f({4, 8, 3, 15, 5}, 3))
+        end)
+    end)
 end)

@@ -52,36 +52,66 @@ local roll = function (roll_args)
 end
 
 
-local funcs = {
-    sum = function(v)
-        local s
-        if type(v) == 'table' then
-            s = 0
-            for _, i in ipairs(v) do
-                s = s + i
-            end
-        else
-            s = v
-        end
-        return s
-    end,
+local funcs = {}
 
-    max = function(v)
-        if type(v) == 'table' then
-            return math.max(table.unpack(v))
-        else
-            return v
+function funcs.sum(v)
+    local s
+    if type(v) == 'table' then
+        s = 0
+        for _, i in ipairs(v) do
+            s = s + i
         end
-    end,
+    else
+        s = v
+    end
+    return s
+end
 
-    min = function(v)
-        if type(v) == 'table' then
-            return math.min(table.unpack(v))
-        else
-            return v
-        end
-    end,
-}
+function funcs.max(v)
+    if type(v) == 'table' then
+        return math.max(table.unpack(v))
+    else
+        return v
+    end
+end
+
+function funcs.min(v)
+    if type(v) == 'table' then
+        return math.min(table.unpack(v))
+    else
+        return v
+    end
+end
+
+local function slice(t, i, j)
+    i = i or 1
+    j = j or #t
+    local newt = {}
+    for idx = i, j do
+        newt[#newt+1] = t[idx]
+    end
+    return newt
+end
+
+local function copy(t)
+    local newt = {}
+    for i, v in ipairs(t) do
+        newt[i] = v
+    end
+    return newt
+end
+
+function funcs.minn(t, n)
+    local cp = copy(t)
+    table.sort(cp)
+    return slice(cp, 1, n)
+end
+
+function funcs.maxn(t, n)
+    local cp = copy(t)
+    table.sort(cp)
+    return slice(cp, #t-n+1)
+end
 
 
 local function eval (node)
