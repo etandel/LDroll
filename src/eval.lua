@@ -1,55 +1,9 @@
-require 'utils'
-
 local parse = require'parser'.parse
 
 
-local whole_op = function (op)
-    return function(a, b)
-        if type(a) == 'table' then
-            a = table.sum(a)
-        end
-        if type(b) == 'table' then
-            b = table.sum(b)
-        end
-        return op(a, b)
-    end
-end
-
-
-local rollwise_op = function (op)
-    return function(a, b)
-        local rolls, const
-        if type(a) == 'table' then
-            rolls, const = a, b
-        elseif type(b) == 'table' then
-            rolls, const = b, a
-        end
-
-        local newrolls = {}
-        for i, v in ipairs(rolls) do
-            newrolls[i] = op(v, const)
-        end
-        return newrolls
-    end
-end
-
-
-local ops = {
-    ['+'] = whole_op(function(a,b) return a + b end),
-    ['-'] = whole_op(function(a,b) return a - b end),
-
-    ['.+'] = rollwise_op(function(a,b) return a + b end),
-    ['.-'] = rollwise_op(function(a,b) return a - b end),
-}
-
-
-local roll = function (roll_args)
-    local rolls = {}
-    for i = 1, roll_args.ndice do
-        rolls[i] = math.random(1, roll_args.dsize)
-    end
-    return rolls
-end
+-------------------------------------
+----------------FUNCS----------------
+-------------------------------------
 
 
 local funcs = {}
@@ -128,6 +82,65 @@ end
 
 function funcs.err(msg)
     return nil, 'Error: ' .. (msg or '')
+end
+
+
+-------------------------------------
+----------------OPS------------------
+-------------------------------------
+
+
+local whole_op = function (op)
+    return function(a, b)
+        if type(a) == 'table' then
+            a = funcs.sum(a)
+        end
+        if type(b) == 'table' then
+            b = funcs.sum(b)
+        end
+        return op(a, b)
+    end
+end
+
+
+local rollwise_op = function (op)
+    return function(a, b)
+        local rolls, const
+        if type(a) == 'table' then
+            rolls, const = a, b
+        elseif type(b) == 'table' then
+            rolls, const = b, a
+        end
+
+        local newrolls = {}
+        for i, v in ipairs(rolls) do
+            newrolls[i] = op(v, const)
+        end
+        return newrolls
+    end
+end
+
+
+local ops = {
+    ['+'] = whole_op(function(a,b) return a + b end),
+    ['-'] = whole_op(function(a,b) return a - b end),
+
+    ['.+'] = rollwise_op(function(a,b) return a + b end),
+    ['.-'] = rollwise_op(function(a,b) return a - b end),
+}
+
+
+-------------------------------------
+----------------MISC-----------------
+-------------------------------------
+
+
+local roll = function (roll_args)
+    local rolls = {}
+    for i = 1, roll_args.ndice do
+        rolls[i] = math.random(1, roll_args.dsize)
+    end
+    return rolls
 end
 
 
