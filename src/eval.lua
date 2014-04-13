@@ -126,6 +126,13 @@ function funcs.maxn(t, n)
 end
 
 
+function funcs.err(msg)
+    msg = msg or ''
+    io.write('Error: ' .. msg .. '\n')
+    return nil
+end
+
+
 local function eval (node)
     if node.const then
         return tonumber(node.const)
@@ -141,7 +148,13 @@ local function eval (node)
             args[i] = eval(arg)
         end
 
-        return funcs[func.ident](table.unpack(args))
+        f = funcs[func.ident]
+        if not f then
+            return funcs.err('function "' .. func.ident .. '" not found.')
+        else
+            return f(table.unpack(args))
+        end
+
     else
         return eval(node[1])
     end

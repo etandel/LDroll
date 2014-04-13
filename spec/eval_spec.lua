@@ -42,6 +42,13 @@ describe('Eval tests', function()
             assert.is.table(call[1])
         s:revert()
     end)
+
+    it('should call err when func not found', function()
+        local s = stub(funcs, 'err')
+            eval(parse('bla(243)'))
+            assert.stub(s).called_with('function "bla" not found.')
+        s:revert()
+    end)
 end)
 
 
@@ -126,7 +133,7 @@ end)
 
 
 describe('func tests', function()
-    describe('sum', function()
+    describe('sum()', function()
         local f = funcs.sum
 
         it('should sum rolls', function()
@@ -138,7 +145,7 @@ describe('func tests', function()
         end)
     end)
 
-    describe('max', function()
+    describe('max()', function()
         local f = funcs.max
 
         it('should find max', function()
@@ -150,7 +157,7 @@ describe('func tests', function()
         end)
     end)
 
-    describe('min', function()
+    describe('min()', function()
         local f = funcs.min
 
         it('should find min', function()
@@ -162,7 +169,7 @@ describe('func tests', function()
         end)
     end)
 
-    describe('minn', function()
+    describe('minn()', function()
         local f = funcs.minn
 
         it('should find least 3', function()
@@ -170,7 +177,7 @@ describe('func tests', function()
         end)
     end)
 
-    describe('maxn', function()
+    describe('maxn()', function()
         local f = funcs.maxn
 
         it('should find largest 3', function()
@@ -182,11 +189,29 @@ describe('func tests', function()
         local f = funcs.p
 
         it('should return passing arg', function()
-            s = stub(io, 'write')
+            local s = stub(io, 'write')
                 local t = {}
                 f(t)
                 assert.equals(t, f(t))
                 assert.equals(1, f(1))
+            s:revert()
+        end)
+    end)
+
+    describe('err()', function()
+        local f = funcs.err
+
+        it('should print msg', function()
+            local s = stub(io, 'write')
+                m = 'this is an err msg'
+                f(m)
+                assert.stub(s).called_with('Error: '.. m .. '\n')
+            s:revert()
+        end)
+
+        it('should return nil', function()
+            local s = stub(io, 'write')
+                assert.are.same(f(), nil)
             s:revert()
         end)
     end)
