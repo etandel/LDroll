@@ -1,12 +1,12 @@
-LuaDroll is a dice roller that can make virtually any number of rolls of almost any type of die (999d87 is a valid roll); it can also perform simple post-processing (such as summming all rolls, getting the biggest roll etc.)
+LDroll is a dice roller that can make virtually any number of rolls of almost any type of die (999d87 is a valid roll). It's language can also perform simple processing (such as summming all rolls, getting the biggest roll etc.) and is available as a library.
 
-It is implemented on the awesome language Lua (version 5.1), so - of course - to install it you need Lua 5.1 (www.lua.org). Actually, you don't need to perform any sort of installation, since to run LuaDroll, you just do 'lua main.lua" in your terminal and let the Lua interpreter do its job.
+It is implemented on the awesome language Lua (version 5.1), so - of course - to install it you need Lua 5.1 (www.lua.org). Actually, you don't need to perform any sort of installation, since to run LDroll, you just do 'lua main.lua" in your terminal and let the Lua interpreter do its job.
 
 
-The program has 3 files that must be on the same directory:
+The program has 3 files:
 "main.lua" is where the main program is (which is minimal).
-"droll.lua" is where all the function definitions are, which means it's where all the LuaDroll mojo dwells.
-"utils.lua" is a small and simple file with some handy utility functions.
+"parser.lua" is where the parser for ldroll's language is.
+"ldroll.lua" is where all the function definitions are, which means it's where all the LDroll mojo dwells.
 
 
 Copyright (C) 2011 Elias Tandel Barrionovo <elias.tandel@gmail.com>
