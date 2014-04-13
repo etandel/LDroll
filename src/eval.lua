@@ -127,9 +127,7 @@ end
 
 
 function funcs.err(msg)
-    msg = msg or ''
-    io.write('Error: ' .. msg .. '\n')
-    return nil
+    return nil, 'Error: ' .. (msg or '')
 end
 
 

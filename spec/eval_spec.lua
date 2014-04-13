@@ -61,7 +61,12 @@ describe('run() tests', function()
     end)
 
     it('should return whatever eval() returns', function()
-        assert.equal(1, run(1))
+        assert.equal(1, run('1'))
+
+        local code = 'blaaa()'
+        local r, m = run(code)
+        assert.are.same(r, nil)
+        assert.equals(select(2, eval(parse(code))), m)
     end)
 end)
 
@@ -215,17 +220,12 @@ describe('func tests', function()
     describe('err()', function()
         local f = funcs.err
 
-        it('should print msg', function()
+        it('should return nil + msg', function()
             local s = stub(io, 'write')
-                m = 'this is an err msg'
-                f(m)
-                assert.stub(s).called_with('Error: '.. m .. '\n')
-            s:revert()
-        end)
-
-        it('should return nil', function()
-            local s = stub(io, 'write')
-                assert.are.same(f(), nil)
+                local m = 'blabla'
+                local r, msg = f(m)
+                assert.are.same(r, nil)
+                assert.equal('Error: ' .. m, msg)
             s:revert()
         end)
     end)
