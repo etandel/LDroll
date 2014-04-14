@@ -81,7 +81,7 @@ end
 
 
 function funcs.err(msg)
-    return nil, 'Error: ' .. (msg or '')
+    return error('Error: ' .. (msg or ''))
 end
 
 
@@ -163,7 +163,12 @@ local function eval (node)
         if not f then
             return funcs.err('function "' .. func.ident .. '" not found.')
         else
-            return f(table.unpack(args))
+            local ok, res = pcall(f, table.unpack(args))
+            if not ok then
+                return funcs.err('bad call to function "' .. func.ident .. '".')
+            else
+                return res
+            end
         end
 
     else
@@ -172,10 +177,19 @@ local function eval (node)
 end
 
 
+local function msg_handler(m)
+    return m:match('.-:%d+:%s+(.+)') or m
+end
+
 local function run(code)
     local ast = parse(code)
     if ast then
-        return eval(ast)
+        local ok, res = xpcall(eval, msg_handler, ast)
+        if not ok then
+            return nil, res
+        else
+            return res
+        end
     else
         return nil, 'Syntax error'
     end

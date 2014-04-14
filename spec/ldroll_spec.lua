@@ -50,6 +50,13 @@ describe('Eval tests', function()
             assert.stub(s).called_with('function "bla" not found.')
         s:revert()
     end)
+
+    it('should handle bad calls', function()
+        local s = stub(funcs, 'err')
+            eval(parse('maxn(1)'))
+            assert.stub(s).called_with('bad call to function "maxn".')
+        s:revert()
+    end)
 end)
 
 
@@ -60,13 +67,15 @@ describe('run() tests', function()
         assert.equals(msg, 'Syntax error')
     end)
 
-    it('should return whatever eval() returns', function()
+    it('should return whatever eval() returns on success', function()
         assert.equal(1, run('1'))
+    end)
 
+    it('should return nil + msg on failure', function()
         local code = 'blaaa()'
         local r, m = run(code)
         assert.are.same(r, nil)
-        assert.equals(select(2, eval(parse(code))), m)
+        assert.true_(type(m) == 'string')
     end)
 end)
 
@@ -223,9 +232,8 @@ describe('func tests', function()
         it('should return nil + msg', function()
             local s = stub(io, 'write')
                 local m = 'blabla'
-                local r, msg = f(m)
-                assert.are.same(r, nil)
-                assert.equal('Error: ' .. m, msg)
+                local exp = 'Error: ' .. m
+                assert.has.error(function() f(m) end, exp)
             s:revert()
         end)
     end)
