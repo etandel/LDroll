@@ -1,8 +1,6 @@
 #!/usr/bin/env lua
 
-package.path = './src/?.lua;' .. package.path
-
-local ldroll = require'ldroll'
+local ldroll = require'ldroll.ldroll'
 
 
 local function droll_main_loop()

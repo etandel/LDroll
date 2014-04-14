@@ -1,4 +1,4 @@
-local parse = require'parser'.parse
+local parse = require'ldroll.parser'.parse
 
 
 -------------------------------------

@@ -1,5 +1,5 @@
-local parse = require 'parser'.parse
-local ldroll = require 'ldroll'
+local parse = require 'ldroll.parser'.parse
+local ldroll = require 'ldroll.ldroll'
 local funcs, ops, roll = ldroll.funcs, ldroll.ops, ldroll.roll
 local eval, run = ldroll.eval, ldroll.run
 
