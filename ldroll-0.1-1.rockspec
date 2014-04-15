@@ -1,9 +1,8 @@
 package = 'LDroll'
 version = '0.1-1'
 source = {
-git@github.com:etandel/LDroll.git
    url = 'git://github.com/etandel/ldroll',
-   tag = '0.1',
+   tag = '0.1-1',
 }
 description = {
    summary = 'A dice rolling utility and library.',
